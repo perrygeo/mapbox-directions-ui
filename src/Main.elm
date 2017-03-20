@@ -1,10 +1,11 @@
 module Main exposing (main)
 
-import Html exposing (Html, button, div, h1, text, ol, input, header, form, footer)
-import Html.Attributes exposing (class, placeholder, type_)
+import Html exposing (Html, button, div, h1, text, li, ol, input, header, form, footer, a)
+import Html.Attributes exposing (class, placeholder, type_, href)
 import Html.Events exposing (onInput, onClick, onSubmit)
 import Http
 import Json.Decode as Decode
+
 
 main : Program Never Model Msg
 main =
@@ -18,9 +19,15 @@ main =
 
 -- Model
 
+type alias CarmenFeature =
+    { placeName : String
+    , relevance : Float
+    , position : List Float
+    }
+
 type alias Model =
     { name : String
-    , results : List String
+    , results : List CarmenFeature
     , waiting : Bool
     }
 
@@ -35,7 +42,7 @@ initialState = ( Model "Zanzibar" [] False , Cmd.none)
 type Msg
     = Geocode
     | SetSearch String
-    | GeocodingResult (Result Http.Error (List String))
+    | GeocodingResult (Result Http.Error (List CarmenFeature))
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -74,22 +81,27 @@ getGeocodingResults query token =
     Http.send GeocodingResult request
 
 
-decodeGeocodingUrl : Decode.Decoder (List String)
+decodeGeocodingUrl : Decode.Decoder (List CarmenFeature)
 decodeGeocodingUrl =
     Decode.at ["features"] (Decode.list placeDecoder)
 
 
-placeDecoder : Decode.Decoder String
+placeDecoder : Decode.Decoder CarmenFeature
 placeDecoder =
-    Decode.at ["place_name"] Decode.string
-
-
+    Decode.map3 CarmenFeature
+        (Decode.field "place_name" Decode.string)
+        (Decode.field "relevance" Decode.float)
+        (Decode.field "center" (Decode.list Decode.float))
 
 -- Views
 
+resultView : CarmenFeature -> Html Msg
+resultView { placeName, position }=
+    li [] [ div [] [ text (placeName ++ " " ++ (toString position)) ] ]
+
 resultsListView : Model -> Html Msg
 resultsListView model =
-   div [] <| List.map (\x -> ol [] [text x]) model.results
+    ol [] <| List.map resultView model.results
 
 
 waitingView : Bool -> Html Msg
@@ -126,10 +138,8 @@ mainView : Model -> Html Msg
 mainView model =
     div []
     [ headerView
-    , div [ class "container" ]
-      [ searchBox model
-      , resultsListView model
-      , waitingView model.waiting
-      ]
+    , searchBox model
+    , resultsListView model
+    , waitingView model.waiting
     , footerView
     ]
