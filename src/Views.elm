@@ -28,7 +28,7 @@ destinationView feature =
 directionsButton : Model -> Html Msg
 directionsButton { destinations } =
     if List.length destinations > 1
-       then button [ ] [ text "Get Directions" ]
+       then button [ onClick Directions ] [ text "Get Directions" ]
        else div [] []
 
 

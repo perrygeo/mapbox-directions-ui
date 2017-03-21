@@ -1,15 +1,16 @@
-module MapboxApi exposing (getGeocodingResults)  --, getDirectionsResults)
+module MapboxApi exposing (getGeocodingResults, getDirectionsResults)
 
-import Types exposing (CarmenFeature, Msg(..))
+import Types exposing (CarmenFeature, RouteFeature, Msg(..))
 import Http
 import Json.Decode as Decode
+import GeoJson
 
 
 getGeocodingResults : String -> String -> Cmd Msg
 getGeocodingResults query token =
   let
     url =
-      "https://api.mapbox.com/geocoding/v5/mapbox.places/" ++ query ++ ".json?limit=3&access_token=" ++ token
+      "https://api.mapbox.com/geocoding/v5/mapbox.places/" ++ query ++ ".json?limit=5&access_token=" ++ token
     request =
       Http.get url decodeGeocoding
   in
@@ -30,16 +31,22 @@ placeDecoder =
         (Decode.field "center" (Decode.index 1 Decode.float))
 
 
--- getDirectionsResults : String -> String -> Cmd Msg
--- getDirectionsResults coordinates token =
---     let
---         url = "https://api.mapbox.com/directions/v5/mapbox/driving/" ++ coordinates
---               ++ "?access_token=" ++ token
---         request =
---           Http.get url decodeDirections
---     in
---         Http.send DirectionsResult request
+getDirectionsResults : String -> String -> Cmd Msg
+getDirectionsResults coordinates token =
+    let
+        url = "https://api.mapbox.com/directions/v5/mapbox/driving/" ++ coordinates
+              ++ "?access_token=" ++ token
+              ++ "&geometries=geojson"
+        request =
+          Http.get url decodeDirections
+    in
+        Http.send DirectionsResult request
 
--- decodeDirections : Decode.Decoder (List CarmenFeature)
--- decodeDirections =
---     Decode.at ["features"] (Decode.list placeDecoder)
+
+routeDecoder : Decode.Decoder RouteFeature
+routeDecoder =
+    Decode.at ["geometry"] (GeoJson.decoder)
+
+decodeDirections : Decode.Decoder (List RouteFeature)
+decodeDirections =
+    Decode.at ["routes"] (Decode.list routeDecoder)

@@ -6,6 +6,7 @@ import Json.Encode exposing (Value)
 -- app.ports.featureToMap.subscribe(callback)
 port resultsToMap : (List Value) -> Cmd msg
 port destinationsToMap : (List Value) -> Cmd msg
+port routesToMap : (List Value) -> Cmd msg
 port setBbox : (Maybe Float, Maybe Float, Maybe Float, Maybe Float) -> Cmd msg
 
 

@@ -2,7 +2,8 @@ module Updates exposing (update)
 
 import MapboxGl
 import MapboxApi
-import Types exposing (CarmenFeature, carmenFeatureObject, Model, Msg(..))
+import Types exposing (CarmenFeature, RouteFeature, routeFeatureObject,
+                       carmenFeatureObject, Model, Msg(..))
 import Secrets exposing (token)
 -- import Cons exposing (cons, imum, Cons)
 
@@ -29,7 +30,16 @@ calcBounds features =
         lats = List.map (\f -> f.lat) features
     in
        ((minimum lngs), (minimum lats), (maximum lngs), (maximum lats))
-       
+
+
+encodeCoords : (List CarmenFeature) -> String
+encodeCoords features =
+    let
+        pairStrings =
+            List.map (\f -> (toString f.lng) ++ "," ++ (toString f.lat)) features
+    in
+       String.join ";" pairStrings
+
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
@@ -41,15 +51,11 @@ update msg model =
 
     AddDestination feature ->
         let
-            newDestinations = feature :: model.destinations 
-            bbox = calcBounds newDestinations 
+            newDestinations = feature :: model.destinations
+            bbox = calcBounds newDestinations
         in
             ( { model | destinations = newDestinations }
             , MapboxGl.destinationsToMap <| List.map carmenFeatureObject newDestinations
-            -- , Cmd.batch
-            --     [ MapboxGl.destinationsToMap <| List.map carmenFeatureObject newDestinations
-            --     , MapboxGl.setBbox bbox
-            --     ]
             )
 
     Geocode ->
@@ -64,11 +70,32 @@ update msg model =
             ( { model | results = results, waiting = False, bbox = bbox }
             , Cmd.batch
                 [ MapboxGl.resultsToMap <| List.map carmenFeatureObject results
-                , MapboxGl.setBbox bbox 
+                , MapboxGl.setBbox bbox
                 ]
             )
 
     GeocodingResult (Err error) ->
+        ( { model | results = [], waiting = False }
+        , Cmd.none
+        )
+
+    Directions ->
+        ( { model | waiting = True }
+        , MapboxApi.getDirectionsResults (encodeCoords model.destinations) token
+        )
+
+    DirectionsResult (Ok routes) ->
+        let
+            bbox = calcBounds model.destinations
+        in
+            ( { model | route = routes, waiting = False, bbox = bbox }
+            , Cmd.batch
+                [ MapboxGl.routesToMap <| List.map routeFeatureObject routes
+                , MapboxGl.setBbox bbox
+                ]
+            )
+
+    DirectionsResult (Err error) ->
         ( { model | results = [], waiting = False }
         , Cmd.none
         )

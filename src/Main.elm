@@ -2,7 +2,7 @@ module Main exposing (main)
 
 import Html exposing (Html)
 
-import Types exposing (CarmenFeature, Model, Msg(..))
+import Types exposing (CarmenFeature, RouteFeature, Model, Msg(..))
 import Updates exposing (update)
 import Views exposing (mainView)
 -- import Subscriptions exposing (subscriptions)
@@ -11,7 +11,7 @@ import Views exposing (mainView)
 
 
 initialState : ( Model , Cmd Msg )
-initialState = ( Model "Zanzibar" [] 0 (Nothing, Nothing, Nothing, Nothing) False [] , Cmd.none)
+initialState = ( Model "Zanzibar" [] 0 (Nothing, Nothing, Nothing, Nothing) False [] [], Cmd.none)
 
 
 main : Program Never Model Msg

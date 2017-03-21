@@ -1,7 +1,8 @@
-module Types exposing (CarmenFeature, carmenFeatureObject, Model, Msg(..))
+module Types exposing (CarmenFeature, carmenFeatureObject, RouteFeature, routeFeatureObject, Model, Msg(..))
 
 import Http
 import Json.Encode exposing (encode, Value, list, float, string, object)
+import GeoJson exposing (Geometry, decoder, encode)
 
 
 type alias CarmenFeature =
@@ -12,9 +13,7 @@ type alias CarmenFeature =
     }
 
 
--- type alias RouteFeature =
---     { geometry : 
---     }
+type alias RouteFeature = GeoJson.GeoJson
 
 
 type alias Model =
@@ -24,6 +23,7 @@ type alias Model =
     , bbox : (Maybe Float, Maybe Float, Maybe Float, Maybe Float)
     , waiting : Bool
     , destinations : List CarmenFeature
+    , route : List RouteFeature
     }
 
 
@@ -31,8 +31,8 @@ type Msg
     = Geocode
     | GeocodingResult (Result Http.Error (List CarmenFeature))
 
-    -- | Directions
-    -- | DirectionsResult (Result Http.Error (List RouteFeature))
+    | Directions
+    | DirectionsResult (Result Http.Error (List RouteFeature))
 
     | AddDestination CarmenFeature
     | SetSearch String
@@ -48,5 +48,14 @@ carmenFeatureObject feature =
         [ ("type", string "Point")
         , ("coordinates", list [(float feature.lng), (float feature.lat)])
         ])
+    ]
+
+
+routeFeatureObject : RouteFeature -> Value
+routeFeatureObject geometry =
+    object
+    [ ("type", string "Feature")
+    , ("properties", object [ ])
+    , ("geometry", (GeoJson.encode geometry))
     ]
 

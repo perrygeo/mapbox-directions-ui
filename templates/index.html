@@ -41,8 +41,15 @@
         };
         map.getSource('destinations').setData(newData);
     });
+    app.ports.routesToMap.subscribe(function(features) {
+        var newData = {
+            "type": "FeatureCollection",
+            "features": features
+        };
+        map.getSource('routes').setData(newData);
+    });
 
-    // TODO send data back to Elm
+    // TODO send data (bbox?) back to Elm
     // app.ports.toElm.send("heyo");
 
 
@@ -51,18 +58,20 @@
 
     var map = new mapboxgl.Map({
         container: 'map',
-        style: 'mapbox://styles/mapbox/streets-v9',
+        style: 'mapbox://styles/mapbox/light-v9',
         center: [0, 0],
         zoom: 1
     });
 
     map.on('load', function () {
+
+        // Results
         map.addLayer({
             "id": "results",
             "type": "circle",
             "paint": {
-                "circle-radius": 10,
-                "circle-color": "#007cbf"
+                "circle-radius": 6,
+                "circle-color": "#448"
             },
             "source": {
                 "type": "geojson",
@@ -72,12 +81,18 @@
                 }
             },
         });
+
+        // Routes
         map.addLayer({
-            "id": "destinations",
-            "type": "circle",
+            "id": "routes",
+            "type": "line",
+            "layout": {
+                "line-join": "round",
+                "line-cap": "round"
+            },
             "paint": {
-                "circle-radius": 14,
-                "circle-color": "#ffff00"
+                "line-color": "#44f",
+                "line-width": 4
             },
             "source": {
                 "type": "geojson",
@@ -85,7 +100,24 @@
                     "type": "FeatureCollection",
                     "features": []
                 }
-            },
+            }
+        });
+
+        // Destinations
+        map.addLayer({
+           "id": "destinations",
+           "type": "circle",
+           "paint": {
+               "circle-radius": 10,
+               "circle-color": "#282"
+           },
+           "source": {
+                "type": "geojson",
+                "data": {
+                    "type": "FeatureCollection",
+                    "features": []
+                }
+           }
         });
     });
 </script>
