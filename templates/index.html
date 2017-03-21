@@ -14,12 +14,8 @@
     var node = document.getElementById('main');
     var app = Elm.Main.embed(node);
     app.ports.featuresToMap.subscribe(function(features) {
-        console.log(features);
-        //app.ports.suggestions.send(suggestions);
-    });
-    app.ports.clearFeatures.subscribe(function() {
-        console.log('Clear Features');
-        //app.ports.suggestions.send(suggestions);
+        console.log("clear map");
+        console.log("featuresToMap", features);
     });
 </script>
 </body>

@@ -1,10 +1,10 @@
 port module MapboxGl exposing (..)
 
+import Json.Encode exposing (Value)
+
 -- to javascript
 -- app.ports.featureToMap.subscribe(callback)
--- port featuresToMap : (List CarmenFeature) -> Cmd msg
-port featuresToMap : String -> Cmd msg
-port clearFeatures : String -> Cmd msg
+port featuresToMap : (List Value) -> Cmd msg
 
 
 -- back to Elm
