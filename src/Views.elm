@@ -9,12 +9,15 @@ import Types exposing (Model, CarmenFeature, Msg(..))
 -- Views
 
 resultView : CarmenFeature -> Html Msg
-resultView { placeName, position }=
-    li [] [ div [] [ text (placeName ++ " " ++ (toString position)) ] ]
+resultView { placeName }=
+    li [] [ div [] [ text placeName ] ]
 
 resultsListView : Model -> Html Msg
 resultsListView model =
-    ol [] <| List.map resultView model.results
+    if List.length model.results > 0
+       then div [ class "results-list" ]
+            [ ol [] <| List.map resultView model.results ]
+       else div [] []
 
 
 waitingView : Model -> Html Msg
@@ -31,14 +34,14 @@ waitingView { waiting } =
 
 searchBox : Model -> Html Msg
 searchBox model =
-    form [ onSubmit Geocode ]
+    form [ class "search", onSubmit Geocode ]
     [ input [ type_ "search", placeholder "Search for place", onInput SetSearch ] []
     , input [ type_ "submit" ] [ text "Search" ]
     ]
 
 bboxView : Model -> Html Msg
 bboxView { bbox } =
-    div [] [ text bbox ]
+    div [] [ text <| toString bbox ]
 
 headerView : Html Msg
 headerView =
@@ -54,10 +57,10 @@ footerView =
 mainView : Model -> Html Msg
 mainView model =
     div []
-    [ headerView
-    , searchBox model
+    [ searchBox model
+    -- , headerView
     , resultsListView model
     , waitingView model
-    , bboxView model
+    -- , bboxView model
     , footerView
     ]

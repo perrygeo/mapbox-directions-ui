@@ -5,19 +5,69 @@
     <meta content="application">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <link rel="stylesheet" type="text/css" href="main.css">
+    <link type="text/css" rel="stylesheet" href="main.css">
+    <link type="text/css" href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.34.0/mapbox-gl.css' rel='stylesheet' />
 </head>
 <body>
+
 <div id="main"></div>
-<script src="main.js" type="text/javascript"></script>
+<div id="map"></div>
+
+<script type="text/javascript" src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.34.0/mapbox-gl.js'></script>
+<script type="text/javascript" src="main.js"></script>
 <script type="text/javascript">
+    // Set up Elm div
     var node = document.getElementById('main');
     var app = Elm.Main.embed(node);
+
+    // Write callbacks for incoming Elm Ports
+    app.ports.setBbox.subscribe(function(bbox) {
+        var sw = new mapboxgl.LngLat(bbox[0], bbox[1]);
+        var ne = new mapboxgl.LngLat(bbox[2], bbox[3]);
+        var bounds = new mapboxgl.LngLatBounds(sw, ne);
+        map.fitBounds(bounds, { padding: 20 });
+    });
     app.ports.featuresToMap.subscribe(function(features) {
-        console.log("clear map");
-        console.log("featuresToMap", features);
-        app.ports.toElm.send("heyo");
+        var newData = {
+            "type": "FeatureCollection",
+            "features": features
+        };
+        map.getSource('points').setData(newData);
+    });
+
+    // TODO send data back to Elm
+    // app.ports.toElm.send("heyo");
+
+
+    // Set up MapboxGLJS map element
+    mapboxgl.accessToken = 'pk.eyJ1IjoicGVycnlnZW8iLCJhIjoiNjJlNTZmNTNjZTFkZTE2NDUxMjg2ZDg2ZDdjMzI5NTEifQ.-f-A9HuHrPZ7fHhlZxYLHQ';
+
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/dark-v9',
+        center: [0, 0],
+        zoom: 1
+    });
+
+    map.on('load', function () {
+        map.addLayer({
+            "id": "points",
+            "type": "circle",
+            "paint": {
+                "circle-radius": 10,
+                "circle-color": "#007cbf"
+            },
+            "source": {
+                "type": "geojson",
+                "data": {
+                    "type": "FeatureCollection",
+                    "features": []
+                }
+            },
+        });
     });
 </script>
+
+
 </body>
 </html>

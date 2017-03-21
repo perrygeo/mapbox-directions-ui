@@ -24,7 +24,8 @@ decodeGeocodingUrl =
 
 placeDecoder : Decode.Decoder CarmenFeature
 placeDecoder =
-    Decode.map3 CarmenFeature
+    Decode.map4 CarmenFeature
         (Decode.field "place_name" Decode.string)
         (Decode.field "relevance" Decode.float)
-        (Decode.field "center" (Decode.list Decode.float))
+        (Decode.field "center" (Decode.index 0 Decode.float))
+        (Decode.field "center" (Decode.index 1 Decode.float))

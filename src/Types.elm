@@ -7,7 +7,8 @@ import Json.Encode exposing (encode, Value, list, float, string, object)
 type alias CarmenFeature =
     { placeName : String
     , relevance : Float
-    , position : List Float
+    , lng : Float
+    , lat : Float
     }
 
 
@@ -15,14 +16,13 @@ type alias Model =
     { name : String
     , results : List CarmenFeature
     , activeResult : Int
-    , bbox : String
+    , bbox : (Maybe Float, Maybe Float, Maybe Float, Maybe Float)
     , waiting : Bool
     }
 
 
 type Msg
     = Geocode
-    | NewBbox String
     | SetSearch String
     | GeocodingResult (Result Http.Error (List CarmenFeature))
 
@@ -35,7 +35,7 @@ carmenFeatureObject feature =
         [ ("place_name", string feature.placeName) ])
     , ("geometry", object
         [ ("type", string "Point")
-        , ("coordinates", list (List.map float feature.position))
+        , ("coordinates", list [(float feature.lng), (float feature.lat)])
         ])
     ]
 
