@@ -16,6 +16,7 @@
     app.ports.featuresToMap.subscribe(function(features) {
         console.log("clear map");
         console.log("featuresToMap", features);
+        app.ports.toElm.send("heyo");
     });
 </script>
 </body>

@@ -15,12 +15,14 @@ type alias Model =
     { name : String
     , results : List CarmenFeature
     , activeResult : Int
+    , bbox : String
     , waiting : Bool
     }
 
 
 type Msg
     = Geocode
+    | NewBbox String
     | SetSearch String
     | GeocodingResult (Result Http.Error (List CarmenFeature))
 

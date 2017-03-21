@@ -17,9 +17,9 @@ resultsListView model =
     ol [] <| List.map resultView model.results
 
 
-waitingView : Bool -> Html Msg
-waitingView show =
-    if show
+waitingView : Model -> Html Msg
+waitingView { waiting } =
+    if waiting
        then div [ class "waiting" ] [ text "Waiting..." ]
        else div [] []
 
@@ -35,6 +35,10 @@ searchBox model =
     [ input [ type_ "search", placeholder "Search for place", onInput SetSearch ] []
     , input [ type_ "submit" ] [ text "Search" ]
     ]
+
+bboxView : Model -> Html Msg
+bboxView { bbox } =
+    div [] [ text bbox ]
 
 headerView : Html Msg
 headerView =
@@ -53,6 +57,7 @@ mainView model =
     [ headerView
     , searchBox model
     , resultsListView model
-    , waitingView model.waiting
+    , waitingView model
+    , bboxView model
     , footerView
     ]

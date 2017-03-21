@@ -16,6 +16,11 @@ update msg model =
         , Cmd.none
         )
 
+    NewBbox bbox ->
+        ( { model | bbox = bbox }
+        , Cmd.none
+        )
+
     Geocode ->
         ( { model | results = [], waiting = True }
         , MapboxApi.getGeocodingResults model.name token
