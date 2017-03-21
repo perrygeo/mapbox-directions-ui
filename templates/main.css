@@ -9,12 +9,21 @@ body { margin:0; padding:0; }
     padding:20px;
 }
 
+.input {
+    width: 340px;
+    height: 46px;
+    padding: 10px 16px;
+    font-size: 18px;
+    line-height: 1.33;
+    border-radius: 6px;
+}
+
 .results-list {
     position:absolute;
     top: 20px;
     left: 20px;
     padding: 20px;
-    background-color: lightgrey;
+    background-color: darkgrey;
     -moz-border-radius: 15px;
     border-radius: 15px;
 }

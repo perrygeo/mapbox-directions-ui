@@ -1,6 +1,6 @@
 module Views exposing (mainView)
 
-import Html exposing (Html, button, div, h1, text, li, ol, input, header, form, footer, a)
+import Html exposing (Html, button, div, h1, text, li, ul, ol, input, header, form, footer, a)
 import Html.Attributes exposing (class, placeholder, type_, href)
 import Html.Events exposing (onInput, onClick, onSubmit)
 import Types exposing (Model, CarmenFeature, Msg(..))
@@ -10,13 +10,13 @@ import Types exposing (Model, CarmenFeature, Msg(..))
 
 resultView : CarmenFeature -> Html Msg
 resultView { placeName }=
-    li [] [ div [] [ text placeName ] ]
+    li [] [ a [ href "#" ] [ text placeName ] ]
 
 resultsListView : Model -> Html Msg
 resultsListView model =
     if List.length model.results > 0
        then div [ class "results-list" ]
-            [ ol [] <| List.map resultView model.results ]
+            [ ul [] <| List.map resultView model.results ]
        else div [] []
 
 
@@ -35,8 +35,8 @@ waitingView { waiting } =
 searchBox : Model -> Html Msg
 searchBox model =
     form [ class "search", onSubmit Geocode ]
-    [ input [ type_ "search", placeholder "Search for place", onInput SetSearch ] []
-    , input [ type_ "submit" ] [ text "Search" ]
+    [ input [ type_ "search", class "input", placeholder "Search for a place", onInput SetSearch ] []
+    -- , input [ type_ "submit" ] [ text "Search" ]
     ]
 
 bboxView : Model -> Html Msg

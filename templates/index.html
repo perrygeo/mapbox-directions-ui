@@ -6,7 +6,7 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <link type="text/css" rel="stylesheet" href="main.css">
-    <link type="text/css" href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.34.0/mapbox-gl.css' rel='stylesheet' />
+    <link type="text/css" rel="stylesheet" href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.34.0/mapbox-gl.css" />
 </head>
 <body>
 
@@ -25,7 +25,7 @@
         var sw = new mapboxgl.LngLat(bbox[0], bbox[1]);
         var ne = new mapboxgl.LngLat(bbox[2], bbox[3]);
         var bounds = new mapboxgl.LngLatBounds(sw, ne);
-        map.fitBounds(bounds, { padding: 20 });
+        map.fitBounds(bounds, { padding: 80 });
     });
     app.ports.featuresToMap.subscribe(function(features) {
         var newData = {
