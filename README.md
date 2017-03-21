@@ -2,6 +2,8 @@
 
 A MapboxGLJS and Elm interface to Mapbox geocoding, directions and trip optimization APIs
 
+![Image](../blob/master/docs/img/screenshot1.jpg?raw=true)
+
 ```
 # edit elm-package.json
 elm package install
