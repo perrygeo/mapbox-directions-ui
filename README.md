@@ -10,8 +10,16 @@ make
 
 #### TODO
 
+- About panel
+- Options panel
+- Help panel (initial view)
+- handle no geocoding results
+- waiting icon
+- map destinations
+- styling and typography
 - onMouseOver results, set model.hoverIndex, send a HoverResult port message to map
 - in js, onMouseOver feature, send a HoverPoint port message back to Elm
+- URL Routes
 - onClick result, append it to model.destinations
 - view for model.destinations
 - onClick the "Get Directions"

@@ -12,19 +12,30 @@ type alias CarmenFeature =
     }
 
 
+-- type alias RouteFeature =
+--     { geometry : 
+--     }
+
+
 type alias Model =
     { name : String
     , results : List CarmenFeature
     , activeResult : Int
     , bbox : (Maybe Float, Maybe Float, Maybe Float, Maybe Float)
     , waiting : Bool
+    , destinations : List CarmenFeature
     }
 
 
 type Msg
     = Geocode
-    | SetSearch String
     | GeocodingResult (Result Http.Error (List CarmenFeature))
+
+    -- | Directions
+    -- | DirectionsResult (Result Http.Error (List RouteFeature))
+
+    | AddDestination CarmenFeature
+    | SetSearch String
 
 
 carmenFeatureObject : CarmenFeature -> Value

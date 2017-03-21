@@ -4,7 +4,8 @@ import Json.Encode exposing (Value)
 
 -- to javascript
 -- app.ports.featureToMap.subscribe(callback)
-port featuresToMap : (List Value) -> Cmd msg
+port resultsToMap : (List Value) -> Cmd msg
+port destinationsToMap : (List Value) -> Cmd msg
 port setBbox : (Maybe Float, Maybe Float, Maybe Float, Maybe Float) -> Cmd msg
 
 

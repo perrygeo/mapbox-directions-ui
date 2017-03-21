@@ -1,6 +1,6 @@
 module Views exposing (mainView)
 
-import Html exposing (Html, button, div, h1, text, li, ul, ol, input, header, form, footer, a)
+import Html exposing (Html, button, div, h1, h2, text, li, ul, ol, input, header, form, footer, a, p)
 import Html.Attributes exposing (class, placeholder, type_, href)
 import Html.Events exposing (onInput, onClick, onSubmit)
 import Types exposing (Model, CarmenFeature, Msg(..))
@@ -9,8 +9,8 @@ import Types exposing (Model, CarmenFeature, Msg(..))
 -- Views
 
 resultView : CarmenFeature -> Html Msg
-resultView { placeName }=
-    li [] [ a [ href "#" ] [ text placeName ] ]
+resultView feature =
+    li [] [ a [ href "#", onClick (AddDestination feature) ] [ text feature.placeName ] ]
 
 resultsListView : Model -> Html Msg
 resultsListView model =
@@ -19,6 +19,29 @@ resultsListView model =
             [ ul [] <| List.map resultView model.results ]
        else div [] []
 
+destinationView : CarmenFeature -> Html Msg
+destinationView feature =
+    -- todo remove desitnation
+    li [] [ p [ ] [ text feature.placeName ] ]
+
+
+directionsButton : Model -> Html Msg
+directionsButton { destinations } =
+    if List.length destinations > 1
+       then button [ ] [ text "Get Directions" ]
+       else div [] []
+
+
+destinationListView : Model -> Html Msg
+destinationListView model =
+    if List.length model.destinations > 0
+       then div [ class "destinations-list" ]
+            [ h2 [] [ text "Destinations" ]
+            , ol [] <| List.map destinationView model.destinations
+            , directionsButton model
+            ]
+       else div [ ] [ ]
+       
 
 waitingView : Model -> Html Msg
 waitingView { waiting } =
@@ -39,28 +62,28 @@ searchBox model =
     -- , input [ type_ "submit" ] [ text "Search" ]
     ]
 
-bboxView : Model -> Html Msg
-bboxView { bbox } =
-    div [] [ text <| toString bbox ]
+-- bboxView : Model -> Html Msg
+-- bboxView { bbox } =
+--     div [] [ text <| toString bbox ]
 
-headerView : Html Msg
-headerView =
-    header [ ]
-    [ h1 [ ] [ text ("Elm talking to the Mapbox Geocoding API") ]
-    ]
+-- headerView : Html Msg
+-- headerView =
+--     header [ ]
+--     [ h1 [ ] [ text ("Elm talking to the Mapbox Geocoding API") ]
+--     ]
 
-footerView : Html Msg
-footerView =
-    footer [ ]
-    [ div [] [ text ("Copyright 2017 Matthew Perry, @perrygeo") ] ]
+-- footerView : Html Msg
+-- footerView =
+--     footer [ ]
+--     [ div [] [ text ("Copyright 2017 Matthew Perry, @perrygeo") ] ]
 
 mainView : Model -> Html Msg
 mainView model =
     div []
-    [ searchBox model
-    -- , headerView
-    , resultsListView model
-    , waitingView model
-    -- , bboxView model
-    , footerView
+    [ div [ class "right-bar" ]
+        [ searchBox model
+        , resultsListView model
+        , destinationListView model
+        , waitingView model
+        ]
     ]

@@ -11,7 +11,7 @@ import Views exposing (mainView)
 
 
 initialState : ( Model , Cmd Msg )
-initialState = ( Model "Zanzibar" [] 0 (Nothing, Nothing, Nothing, Nothing) False , Cmd.none)
+initialState = ( Model "Zanzibar" [] 0 (Nothing, Nothing, Nothing, Nothing) False [] , Cmd.none)
 
 
 main : Program Never Model Msg

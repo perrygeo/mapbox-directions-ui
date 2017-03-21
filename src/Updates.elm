@@ -36,8 +36,21 @@ update msg model =
   case msg of
     SetSearch newname ->
         ( { model | name = newname, results = [] }
-        , Cmd.none
+        , MapboxGl.resultsToMap []
         )
+
+    AddDestination feature ->
+        let
+            newDestinations = feature :: model.destinations 
+            bbox = calcBounds newDestinations 
+        in
+            ( { model | destinations = newDestinations }
+            , MapboxGl.destinationsToMap <| List.map carmenFeatureObject newDestinations
+            -- , Cmd.batch
+            --     [ MapboxGl.destinationsToMap <| List.map carmenFeatureObject newDestinations
+            --     , MapboxGl.setBbox bbox
+            --     ]
+            )
 
     Geocode ->
         ( { model | results = [], waiting = True }
@@ -50,7 +63,7 @@ update msg model =
         in
             ( { model | results = results, waiting = False, bbox = bbox }
             , Cmd.batch
-                [ MapboxGl.featuresToMap <| List.map carmenFeatureObject results
+                [ MapboxGl.resultsToMap <| List.map carmenFeatureObject results
                 , MapboxGl.setBbox bbox 
                 ]
             )

@@ -27,12 +27,19 @@
         var bounds = new mapboxgl.LngLatBounds(sw, ne);
         map.fitBounds(bounds, { padding: 80 });
     });
-    app.ports.featuresToMap.subscribe(function(features) {
+    app.ports.resultsToMap.subscribe(function(features) {
         var newData = {
             "type": "FeatureCollection",
             "features": features
         };
-        map.getSource('points').setData(newData);
+        map.getSource('results').setData(newData);
+    });
+    app.ports.destinationsToMap.subscribe(function(features) {
+        var newData = {
+            "type": "FeatureCollection",
+            "features": features
+        };
+        map.getSource('destinations').setData(newData);
     });
 
     // TODO send data back to Elm
@@ -44,18 +51,33 @@
 
     var map = new mapboxgl.Map({
         container: 'map',
-        style: 'mapbox://styles/mapbox/dark-v9',
+        style: 'mapbox://styles/mapbox/streets-v9',
         center: [0, 0],
         zoom: 1
     });
 
     map.on('load', function () {
         map.addLayer({
-            "id": "points",
+            "id": "results",
             "type": "circle",
             "paint": {
                 "circle-radius": 10,
                 "circle-color": "#007cbf"
+            },
+            "source": {
+                "type": "geojson",
+                "data": {
+                    "type": "FeatureCollection",
+                    "features": []
+                }
+            },
+        });
+        map.addLayer({
+            "id": "destinations",
+            "type": "circle",
+            "paint": {
+                "circle-radius": 14,
+                "circle-color": "#ffff00"
             },
             "source": {
                 "type": "geojson",
