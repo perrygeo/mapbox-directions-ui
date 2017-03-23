@@ -31,11 +31,14 @@ placeDecoder =
         (Decode.field "center" (Decode.index 1 Decode.float))
 
 
+-- Directions
+
 getDirectionsResults : String -> String -> Cmd Msg
 getDirectionsResults coordinates token =
     let
         url = "https://api.mapbox.com/directions/v5/mapbox/driving/" ++ coordinates
               ++ "?access_token=" ++ token
+              ++ "&overview=full"
               ++ "&geometries=geojson"
         request =
           Http.get url decodeDirections

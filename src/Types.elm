@@ -29,13 +29,10 @@ type alias Model =
 
 type Msg
     = Geocode
-    | GeocodingResult (Result Http.Error (List CarmenFeature))
-
-    | Directions
-    | DirectionsResult (Result Http.Error (List RouteFeature))
-
     | AddDestination CarmenFeature
     | SetSearch String
+    | GeocodingResult (Result Http.Error (List CarmenFeature))
+    | DirectionsResult (Result Http.Error (List RouteFeature))
 
 
 carmenFeatureObject : CarmenFeature -> Value

@@ -1,15 +1,12 @@
-default: clean-logs html
+default: clean-logs js static
 
-.PHONY: js html css clean-logs publish
+.PHONY: js static clean-logs publish
 
 js:
 	elm make src/Main.elm --output build/main.js
 
-html: js css
-	cp templates/index.html build/index.html
-
-css:
-	cp templates/main.css build/main.css
+static:
+	cp -r static/* build/
 
 clean-logs:
 	ls src/npm-debug.log.* && rm src/npm-debug.log.* || echo

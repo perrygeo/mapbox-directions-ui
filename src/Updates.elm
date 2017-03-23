@@ -45,19 +45,25 @@ update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
     SetSearch newname ->
-        ( { model | name = newname, results = [] }
-        , MapboxGl.resultsToMap []
+        ( { model | name = newname, results = [], waiting = True }
+        , MapboxApi.getGeocodingResults model.name token
         )
 
     AddDestination feature ->
         let
-            newDestinations = feature :: model.destinations
+            newDestinations = List.append model.destinations (List.singleton feature)
             bbox = calcBounds newDestinations
         in
-            ( { model | destinations = newDestinations }
-            , MapboxGl.destinationsToMap <| List.map carmenFeatureObject newDestinations
+            ( { model | name = "", results = [], destinations = newDestinations, waiting = True }
+            , Cmd.batch 
+                [ MapboxGl.destinationsToMap <| List.map carmenFeatureObject newDestinations
+                , MapboxGl.setBbox bbox
+                -- adding a destination triggers a directions API call
+                , MapboxApi.getDirectionsResults (encodeCoords newDestinations) token
+                ]
             )
 
+    -- todo remove this message
     Geocode ->
         ( { model | results = [], waiting = True }
         , MapboxApi.getGeocodingResults model.name token
@@ -68,20 +74,12 @@ update msg model =
             bbox = calcBounds results
         in
             ( { model | results = results, waiting = False, bbox = bbox }
-            , Cmd.batch
-                [ MapboxGl.resultsToMap <| List.map carmenFeatureObject results
-                , MapboxGl.setBbox bbox
-                ]
+            , Cmd.none
             )
 
     GeocodingResult (Err error) ->
         ( { model | results = [], waiting = False }
         , Cmd.none
-        )
-
-    Directions ->
-        ( { model | waiting = True }
-        , MapboxApi.getDirectionsResults (encodeCoords model.destinations) token
         )
 
     DirectionsResult (Ok routes) ->

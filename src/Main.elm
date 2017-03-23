@@ -8,10 +8,8 @@ import Views exposing (mainView)
 -- import Subscriptions exposing (subscriptions)
 
 
-
-
 initialState : ( Model , Cmd Msg )
-initialState = ( Model "Zanzibar" [] 0 (Nothing, Nothing, Nothing, Nothing) False [] [], Cmd.none)
+initialState = ( Model "" [] 0 (Nothing, Nothing, Nothing, Nothing) False [] [], Cmd.none)
 
 
 main : Program Never Model Msg

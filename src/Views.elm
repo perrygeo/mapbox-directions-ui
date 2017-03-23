@@ -1,7 +1,7 @@
 module Views exposing (mainView)
 
-import Html exposing (Html, button, div, h1, h2, text, li, ul, ol, input, header, form, footer, a, p)
-import Html.Attributes exposing (class, placeholder, type_, href)
+import Html exposing (Html, button, div, h1, h3, text, li, ul, ol, input, header, form, footer, a, p, img)
+import Html.Attributes exposing (class, src, placeholder, type_, href, value)
 import Html.Events exposing (onInput, onClick, onSubmit)
 import Types exposing (Model, CarmenFeature, Msg(..))
 
@@ -22,31 +22,28 @@ resultsListView model =
 destinationView : CarmenFeature -> Html Msg
 destinationView feature =
     -- todo remove desitnation
-    li [] [ p [ ] [ text feature.placeName ] ]
+    li [] [ p [ class "destination" ] [ text feature.placeName ] ]
 
 
-directionsButton : Model -> Html Msg
-directionsButton { destinations } =
-    if List.length destinations > 1
-       then button [ onClick Directions ] [ text "Get Directions" ]
-       else div [] []
+-- directionsButton : Model -> Html Msg
+-- directionsButton { destinations } =
+--     if List.length destinations > 1
+--        then button [ onClick Directions ] [ text "Get Directions" ]
+--        else div [] []
 
 
 destinationListView : Model -> Html Msg
 destinationListView model =
     if List.length model.destinations > 0
        then div [ class "destinations-list" ]
-            [ h2 [] [ text "Destinations" ]
-            , ol [] <| List.map destinationView model.destinations
-            , directionsButton model
-            ]
+            [ ol [] <| List.map destinationView model.destinations ]
        else div [ ] [ ]
        
 
 waitingView : Model -> Html Msg
 waitingView { waiting } =
     if waiting
-       then div [ class "waiting" ] [ text "Waiting..." ]
+       then div [ class "waiting" ] [ img [ src "loading.gif" ] [] ]
        else div [] []
 
 
@@ -58,8 +55,7 @@ waitingView { waiting } =
 searchBox : Model -> Html Msg
 searchBox model =
     form [ class "search", onSubmit Geocode ]
-    [ input [ type_ "search", class "input", placeholder "Search for a place", onInput SetSearch ] []
-    -- , input [ type_ "submit" ] [ text "Search" ]
+    [ input [ type_ "search", class "input", placeholder "Search for a place", value model.name, onInput SetSearch ] []
     ]
 
 -- bboxView : Model -> Html Msg
@@ -81,9 +77,10 @@ mainView : Model -> Html Msg
 mainView model =
     div []
     [ div [ class "right-bar" ]
-        [ searchBox model
-        , resultsListView model
+        [ h3 [] [ text "Destinations" ]
         , destinationListView model
+        , searchBox model
+        , resultsListView model
         , waitingView model
         ]
     ]
