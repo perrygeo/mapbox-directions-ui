@@ -28,7 +28,7 @@ destinationView feature =
     [ div [] 
         [ p [ class "destination" ] 
             [ text feature.placeName
-            , button [ class "fr btn btn--xs", onClick (DeleteDestination feature) ] [ text "x" ]
+            , a [ href "#", class "fr", onClick (DeleteDestination feature) ] [ text "x" ]
             ]
         ]
     ]
@@ -45,7 +45,7 @@ destinationListView model =
 waitingView : Model -> Html Msg
 waitingView { waiting } =
     if waiting
-       then div [ class "waiting" ] [ img [ src "loading.gif" ] [] ]
+       then div [ class "waiting loading" ] []
        else div [] []
 
 
