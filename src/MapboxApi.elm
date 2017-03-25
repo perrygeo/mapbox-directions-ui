@@ -6,6 +6,9 @@ import Json.Decode as Decode
 import GeoJson
 
 
+-- Geocoding
+
+
 getGeocodingResults : String -> String -> Cmd Msg
 getGeocodingResults query token =
   let
@@ -24,7 +27,8 @@ decodeGeocoding =
 
 placeDecoder : Decode.Decoder CarmenFeature
 placeDecoder =
-    Decode.map4 CarmenFeature
+    Decode.map5 CarmenFeature
+        (Decode.field "id" Decode.string)
         (Decode.field "place_name" Decode.string)
         (Decode.field "relevance" Decode.float)
         (Decode.field "center" (Decode.index 0 Decode.float))
@@ -32,6 +36,7 @@ placeDecoder =
 
 
 -- Directions
+
 
 getDirectionsResults : String -> String -> Cmd Msg
 getDirectionsResults coordinates token =

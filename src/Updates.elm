@@ -43,12 +43,12 @@ encodeCoords features =
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
-  case msg of
+  case Debug.log "Update Message:" msg of
     SetSearch newname ->
         let
             runSearch = String.length newname > 3
             cmd = if runSearch
-                     then MapboxApi.getGeocodingResults model.name token 
+                     then MapboxApi.getGeocodingResults model.name token
                      else Cmd.none
         in
             ( { model | name = newname, results = [], waiting = runSearch }
@@ -71,7 +71,23 @@ update msg model =
             , Cmd.batch cmds
             )
 
-    -- todo remove this message
+    DeleteDestination feature -> 
+        let
+            newDestinations = List.filterMap (\f -> if f == feature then Nothing else Just f ) model.destinations 
+            runSearch = List.length newDestinations > 1
+            bbox = calcBounds newDestinations
+            cmds =
+                 [ MapboxGl.destinationsToMap <| List.map carmenFeatureObject newDestinations
+                 , MapboxGl.setBbox bbox
+                 , if runSearch
+                      then MapboxApi.getDirectionsResults (encodeCoords newDestinations) token
+                      else MapboxGl.routesToMap <| List.map routeFeatureObject []  -- clear route
+                 ]
+        in
+            ( { model | destinations = newDestinations, waiting = True }
+            , Cmd.batch cmds
+            )
+            
     Geocode ->
         ( { model | results = [], waiting = True }
         , MapboxApi.getGeocodingResults model.name token
@@ -106,3 +122,6 @@ update msg model =
         , Cmd.none
         )
 
+    -- MoveDestination spaces ->
+    --     let
+    --         newDestinations = { model.

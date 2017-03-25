@@ -6,7 +6,8 @@ import GeoJson exposing (Geometry, decoder, encode)
 
 
 type alias CarmenFeature =
-    { placeName : String
+    { id : String
+    , placeName : String
     , relevance : Float
     , lng : Float
     , lat : Float
@@ -30,6 +31,7 @@ type alias Model =
 type Msg
     = Geocode
     | AddDestination CarmenFeature
+    | DeleteDestination CarmenFeature
     | SetSearch String
     | GeocodingResult (Result Http.Error (List CarmenFeature))
     | DirectionsResult (Result Http.Error (List RouteFeature))

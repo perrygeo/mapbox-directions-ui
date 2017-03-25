@@ -24,8 +24,14 @@ resultsListView model =
 
 destinationView : CarmenFeature -> Html Msg
 destinationView feature =
-    -- todo remove desitnation
-    li [] [ p [ class "destination" ] [ text feature.placeName ] ]
+    li []
+    [ div [] 
+        [ p [ class "destination" ] 
+            [ text feature.placeName
+            , button [ class "fr btn btn--xs", onClick (DeleteDestination feature) ] [ text "x" ]
+            ]
+        ]
+    ]
 
 
 destinationListView : Model -> Html Msg
