@@ -94,8 +94,10 @@ footer {
 
 .waiting {
     position:absolute;
-    bottom:0;
-    padding:12px;
+    top: 0;
+    right: 0;
+    margin-right: 24px;
+    margin-top: 24px;
 }
 
 ul, ol {

@@ -1,9 +1,10 @@
 module Views exposing (mainView)
 
-import Html exposing (Html, button, div, h1, h2, text, li, ul, ol, input, header, form, footer, a, p, img)
-import Html.Attributes exposing (class, src, placeholder, type_, href, value)
+import Html exposing (Html, button, div, h1, h2, text, li, ul, ol, input, header, form, footer, a, p, img, span)
+import Html.Attributes exposing (class, src, placeholder, type_, href, value, property)
 import Html.Events exposing (onInput, onClick, onSubmit)
 import Types exposing (Model, CarmenFeature, Msg(..))
+import Json.Encode exposing (string)
 
 
 -- Views
@@ -22,13 +23,21 @@ resultsListView model =
        else div [] []
 
 
+
 destinationView : CarmenFeature -> Html Msg
 destinationView feature =
     li []
-    [ div [] 
-        [ p [ class "destination" ] 
+    [ div []
+        [ div [ class "destination" ]
             [ text feature.placeName
-            , a [ href "#", class "fr", onClick (DeleteDestination feature) ] [ text "x" ]
+            , div [ class "flex-parent-inline" ]
+                [ button [ class "btn btn--pill btn--pill-hl", onClick (MoveDestination feature -1) ]
+                         [ span [ property "innerHTML" (string "&uarr;") ] []]
+                , button [ class "btn btn--pill btn--pill-hc", onClick (MoveDestination feature 1) ]
+                         [ span [ property "innerHTML" (string "&darr;") ] []]
+                , button [ class "btn btn--pill btn--pill-hr", onClick (DeleteDestination feature) ]
+                         [ text "x" ]
+                ]
             ]
         ]
     ]
@@ -61,7 +70,7 @@ searchBox model =
     ]
 
 logo : Html Msg
-logo = 
+logo =
     div [ class "mb-logo mb-logo--white" ] []
 
 mainView : Model -> Html Msg

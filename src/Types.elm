@@ -32,6 +32,7 @@ type Msg
     = Geocode
     | AddDestination CarmenFeature
     | DeleteDestination CarmenFeature
+    | MoveDestination CarmenFeature Int
     | SetSearch String
     | GeocodingResult (Result Http.Error (List CarmenFeature))
     | DirectionsResult (Result Http.Error (List RouteFeature))

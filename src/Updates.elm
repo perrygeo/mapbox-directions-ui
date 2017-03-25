@@ -5,7 +5,7 @@ import MapboxApi
 import Types exposing (CarmenFeature, RouteFeature, routeFeatureObject,
                        carmenFeatureObject, Model, Msg(..))
 import Secrets exposing (token)
--- import Cons exposing (cons, imum, Cons)
+import List.Extra
 
 
 -- Updates
@@ -41,6 +41,53 @@ encodeCoords features =
        String.join ";" pairStrings
 
 
+updateDestinations : Model -> (List CarmenFeature) -> (Model, Cmd Msg)
+updateDestinations model newDestinations =
+    let
+        runSearch = List.length newDestinations > 1
+        bbox = calcBounds newDestinations
+        cmds = [ MapboxGl.destinationsToMap <| List.map carmenFeatureObject newDestinations
+               , MapboxGl.setBbox bbox
+               , if runSearch
+                    then MapboxApi.getDirectionsResults (encodeCoords newDestinations) token
+                    else MapboxGl.routesToMap <| List.map routeFeatureObject []  -- clear route
+               ]
+    in
+        ( { model | name = "", results = [], destinations = newDestinations, waiting = runSearch }
+        , Cmd.batch cmds
+        )
+
+
+moveItem : a -> Int -> List a -> List a
+moveItem item relPos data =
+   let
+       pos = List.Extra.elemIndex item data
+       pre = case pos of
+           Just x ->
+               List.take x data
+           Nothing ->
+               []
+       post = case pos of
+           Just x ->
+               List.drop (x + 1) data
+           Nothing ->
+               []
+       partA =
+           List.append
+           (List.take ((List.length pre) + relPos) pre)
+           (List.take relPos post)
+
+       partC =
+           List.append
+           (List.drop ((List.length pre) + relPos) pre)
+           (List.drop relPos post)
+
+   in
+      List.append
+      (List.append partA (List.singleton item))
+      partC
+
+
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case Debug.log "Update Message:" msg of
@@ -58,35 +105,20 @@ update msg model =
     AddDestination feature ->
         let
             newDestinations = List.append model.destinations (List.singleton feature)
-            runSearch = List.length newDestinations > 1
-            bbox = calcBounds newDestinations
-            cmds = [ MapboxGl.destinationsToMap <| List.map carmenFeatureObject newDestinations
-                   , MapboxGl.setBbox bbox
-                   , if runSearch
-                        then MapboxApi.getDirectionsResults (encodeCoords newDestinations) token
-                        else Cmd.none
-                   ]
         in
-            ( { model | name = "", results = [], destinations = newDestinations, waiting = runSearch }
-            , Cmd.batch cmds
-            )
+            updateDestinations model newDestinations
 
     DeleteDestination feature -> 
         let
             newDestinations = List.filterMap (\f -> if f == feature then Nothing else Just f ) model.destinations 
-            runSearch = List.length newDestinations > 1
-            bbox = calcBounds newDestinations
-            cmds =
-                 [ MapboxGl.destinationsToMap <| List.map carmenFeatureObject newDestinations
-                 , MapboxGl.setBbox bbox
-                 , if runSearch
-                      then MapboxApi.getDirectionsResults (encodeCoords newDestinations) token
-                      else MapboxGl.routesToMap <| List.map routeFeatureObject []  -- clear route
-                 ]
         in
-            ( { model | destinations = newDestinations, waiting = True }
-            , Cmd.batch cmds
-            )
+            updateDestinations model newDestinations
+
+    MoveDestination feature spaces ->
+        let
+            newDestinations = moveItem feature spaces model.destinations
+        in
+            updateDestinations model newDestinations
             
     Geocode ->
         ( { model | results = [], waiting = True }
@@ -121,7 +153,3 @@ update msg model =
         ( { model | results = [], waiting = False }
         , Cmd.none
         )
-
-    -- MoveDestination spaces ->
-    --     let
-    --         newDestinations = { model.

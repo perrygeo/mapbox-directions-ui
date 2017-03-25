@@ -14,3 +14,8 @@ clean-logs:
 publish: clean-logs js static
 	aws s3 sync --delete build/ s3://perrygeo-test/mapbox-directions-ui/ --acl public-read
 	echo "open https://s3.amazonaws.com/perrygeo-test/mapbox-directions-ui/index.html"
+
+
+try:
+	elm make _try.elm --output /tmp/try.html
+	open /tmp/try.html
