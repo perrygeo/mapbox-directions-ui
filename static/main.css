@@ -18,7 +18,7 @@ h3 {
     font-size: 18px;
     line-height: 1.3333333;
     border-radius: 3px;
-    width: 424px;
+    width: 100%;
 }
 
 .results-list {
@@ -104,4 +104,8 @@ ul, ol {
 p.destination { 
     margin-top: 18px;
     margin-bottom: 8px;
+}
+
+.mb-logo {
+    margin-bottom: 16px;
 }

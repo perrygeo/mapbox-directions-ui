@@ -45,22 +45,30 @@ update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
     SetSearch newname ->
-        ( { model | name = newname, results = [], waiting = True }
-        , MapboxApi.getGeocodingResults model.name token
-        )
+        let
+            runSearch = String.length newname > 3
+            cmd = if runSearch
+                     then MapboxApi.getGeocodingResults model.name token 
+                     else Cmd.none
+        in
+            ( { model | name = newname, results = [], waiting = runSearch }
+            , cmd
+            )
 
     AddDestination feature ->
         let
             newDestinations = List.append model.destinations (List.singleton feature)
+            runSearch = List.length newDestinations > 1
             bbox = calcBounds newDestinations
+            cmds = [ MapboxGl.destinationsToMap <| List.map carmenFeatureObject newDestinations
+                   , MapboxGl.setBbox bbox
+                   , if runSearch
+                        then MapboxApi.getDirectionsResults (encodeCoords newDestinations) token
+                        else Cmd.none
+                   ]
         in
-            ( { model | name = "", results = [], destinations = newDestinations, waiting = True }
-            , Cmd.batch 
-                [ MapboxGl.destinationsToMap <| List.map carmenFeatureObject newDestinations
-                , MapboxGl.setBbox bbox
-                -- adding a destination triggers a directions API call
-                , MapboxApi.getDirectionsResults (encodeCoords newDestinations) token
-                ]
+            ( { model | name = "", results = [], destinations = newDestinations, waiting = runSearch }
+            , Cmd.batch cmds
             )
 
     -- todo remove this message

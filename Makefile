@@ -9,8 +9,8 @@ static:
 	cp -r static/* build/
 
 clean-logs:
-	ls src/npm-debug.log.* && rm src/npm-debug.log.* || echo
+	find . -name 'npm-debug.log.*' | xargs rm
 
-publish: html
-	aws s3 sync build/ s3://perrygeo-test/mapbox-directions-ui/ --acl public-read
+publish: clean-logs js static
+	aws s3 sync --delete build/ s3://perrygeo-test/mapbox-directions-ui/ --acl public-read
 	echo "open https://s3.amazonaws.com/perrygeo-test/mapbox-directions-ui/index.html"

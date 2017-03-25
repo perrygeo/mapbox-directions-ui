@@ -1,6 +1,6 @@
 module Views exposing (mainView)
 
-import Html exposing (Html, button, div, h1, h3, text, li, ul, ol, input, header, form, footer, a, p, img)
+import Html exposing (Html, button, div, h1, h2, text, li, ul, ol, input, header, form, footer, a, p, img)
 import Html.Attributes exposing (class, src, placeholder, type_, href, value)
 import Html.Events exposing (onInput, onClick, onSubmit)
 import Types exposing (Model, CarmenFeature, Msg(..))
@@ -8,9 +8,11 @@ import Types exposing (Model, CarmenFeature, Msg(..))
 
 -- Views
 
+
 resultView : CarmenFeature -> Html Msg
 resultView feature =
     li [] [ a [ href "#", onClick (AddDestination feature) ] [ text feature.placeName ] ]
+
 
 resultsListView : Model -> Html Msg
 resultsListView model =
@@ -19,17 +21,11 @@ resultsListView model =
             [ ul [] <| List.map resultView model.results ]
        else div [] []
 
+
 destinationView : CarmenFeature -> Html Msg
 destinationView feature =
     -- todo remove desitnation
     li [] [ p [ class "destination" ] [ text feature.placeName ] ]
-
-
--- directionsButton : Model -> Html Msg
--- directionsButton { destinations } =
---     if List.length destinations > 1
---        then button [ onClick Directions ] [ text "Get Directions" ]
---        else div [] []
 
 
 destinationListView : Model -> Html Msg
@@ -38,7 +34,7 @@ destinationListView model =
        then div [ class "destinations-list" ]
             [ ol [] <| List.map destinationView model.destinations ]
        else div [ ] [ ]
-       
+
 
 waitingView : Model -> Html Msg
 waitingView { waiting } =
@@ -58,26 +54,16 @@ searchBox model =
     [ input [ type_ "search", class "input", placeholder "Search for a place", value model.name, onInput SetSearch ] []
     ]
 
--- bboxView : Model -> Html Msg
--- bboxView { bbox } =
---     div [] [ text <| toString bbox ]
-
--- headerView : Html Msg
--- headerView =
---     header [ ]
---     [ h1 [ ] [ text ("Elm talking to the Mapbox Geocoding API") ]
---     ]
-
--- footerView : Html Msg
--- footerView =
---     footer [ ]
---     [ div [] [ text ("Copyright 2017 Matthew Perry, @perrygeo") ] ]
+logo : Html Msg
+logo = 
+    div [ class "mb-logo mb-logo--white" ] []
 
 mainView : Model -> Html Msg
 mainView model =
     div []
     [ div [ class "right-bar" ]
-        [ h3 [] [ text "Destinations" ]
+        [ logo
+        , h2 [ ] [ text "Destinations" ]
         , destinationListView model
         , searchBox model
         , resultsListView model
