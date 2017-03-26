@@ -132,4 +132,11 @@ li.destination {
     -webkit-background-size: 100px 350px;
     background-size: 100px 350px;
 }
+
+.txt-h3 {
+    margin-bottom: 16px;
+}
+
+.btn--xs {
+    outline: none!important;
 }

@@ -58,20 +58,17 @@ waitingView { waiting } =
        else div [] []
 
 
--- -- see https://github.com/elm-lang/html/issues/23#issuecomment-229192643
--- onChange : (String -> msg) -> Html.Attribute msg
--- onChange handler =
---   Html.Events.on "change" <| Decode.map handler <| Decode.at ["target", "value"] Decode.string
-
 searchBox : Model -> Html Msg
 searchBox model =
     form [ class "search", onSubmit Geocode ]
     [ input [ type_ "search", class "input", placeholder "Search for a place", value model.name, onInput SetSearch ] []
     ]
 
+
 logo : Html Msg
 logo =
     div [ class "mb-logo mb-logo--white" ] []
+
 
 mainView : Model -> Html Msg
 mainView model =
