@@ -59,7 +59,7 @@ h3 {
     height:100%;
     width: 34%;
     padding: 10px;
-    border-right: 2px darkgrey solid;
+    border-right: 1px darkgrey solid;
     z-index: -1;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;

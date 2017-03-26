@@ -12,20 +12,19 @@ make
 
 #### TODO
 
-- mapbox css, typography, layout and cartography
 - drag and drop destinations
-- delete destination
-- make destinations round-trippable
+- autocomplete geocoding box making full use of UI typeahead
+- make destinations round-trippable (auto-add last)
 - optimize trip (shuffles order)
 - content
     - About panel
     - Options panel
+        - limit search to bbox, proximity, other geocoding settings
     - Help panel (initial view)
 - handle no geocoding results, no directions, errors
 - mouseover markers
     - onMouseOver results, set model.hoverIndex, send a HoverResult port message to map
     - in js, onMouseOver feature, send a HoverPoint port message back to Elm
 - URL Routing, destinations in url
+- GeoJSON upload, download
 - structured CSS with elm-css
-- autocomplete geocoding box with UI typeahead
-- limit search to bbox, proximity, other geocoding settings
