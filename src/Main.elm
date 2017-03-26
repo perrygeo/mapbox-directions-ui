@@ -1,23 +1,26 @@
 module Main exposing (main)
 
 import Html exposing (Html)
-
 import Types exposing (CarmenFeature, RouteFeature, Model, Msg(..))
 import Updates exposing (update, updateDestinations)
 import Views exposing (mainView)
+
+
 -- import Subscriptions exposing (subscriptions)
 
 
 initialModel : Model
-initialModel = 
+initialModel =
     { name = ""
     , results = []
     , activeResult = 0
-    , bbox = (Nothing, Nothing, Nothing, Nothing)
+    , bbox = ( Nothing, Nothing, Nothing, Nothing )
     , waiting = False
     , destinations = []
     , route = []
     }
+
+
 
 -- initDestinations : List CarmenFeature
 -- initDestinations =
@@ -27,7 +30,8 @@ initialModel =
 --     ]
 -- initialState = updateDestinations initialModel initDestinations
 
-initialState : ( Model , Cmd Msg )
+
+initialState : ( Model, Cmd Msg )
 initialState =
     ( initialModel, Cmd.none )
 

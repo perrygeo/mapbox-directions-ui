@@ -14,14 +14,15 @@ type alias CarmenFeature =
     }
 
 
-type alias RouteFeature = GeoJson.GeoJson
+type alias RouteFeature =
+    GeoJson.GeoJson
 
 
 type alias Model =
     { name : String
     , results : List CarmenFeature
     , activeResult : Int
-    , bbox : (Maybe Float, Maybe Float, Maybe Float, Maybe Float)
+    , bbox : ( Maybe Float, Maybe Float, Maybe Float, Maybe Float )
     , waiting : Bool
     , destinations : List CarmenFeature
     , route : List RouteFeature
@@ -40,34 +41,41 @@ type Msg
 
 shortName : String -> String
 shortName name =
-     let
-         res = List.head <| String.split "," name
-     in
+    let
+        res =
+            List.head <| String.split "," name
+    in
         case res of
-            Just x -> x
-            Nothing -> ""
+            Just x ->
+                x
+
+            Nothing ->
+                ""
 
 
 carmenFeatureObject : CarmenFeature -> Value
 carmenFeatureObject feature =
     object
-    [ ("type", string "Feature")
-    , ("properties", object
-        [ ("placeName", string feature.placeName)
-        , ("shortName", string (shortName feature.placeName) )
-        ])
-    , ("geometry", object
-        [ ("type", string "Point")
-        , ("coordinates", list [(float feature.lng), (float feature.lat)])
-        ])
-    ]
+        [ ( "type", string "Feature" )
+        , ( "properties"
+          , object
+                [ ( "placeName", string feature.placeName )
+                , ( "shortName", string (shortName feature.placeName) )
+                ]
+          )
+        , ( "geometry"
+          , object
+                [ ( "type", string "Point" )
+                , ( "coordinates", list [ (float feature.lng), (float feature.lat) ] )
+                ]
+          )
+        ]
 
 
 routeFeatureObject : RouteFeature -> Value
 routeFeatureObject geometry =
     object
-    [ ("type", string "Feature")
-    , ("properties", object [ ])
-    , ("geometry", (GeoJson.encode geometry))
-    ]
-
+        [ ( "type", string "Feature" )
+        , ( "properties", object [] )
+        , ( "geometry", (GeoJson.encode geometry) )
+        ]
