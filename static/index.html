@@ -5,8 +5,8 @@
     <meta content="application">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <!-- <link type="text/css" rel="stylesheet" href="https://api.mapbox.com/mapbox-assembly/v0.12.0/assembly.min.css" /> -->
-    <link type="text/css" rel="stylesheet" href='https://www.mapbox.com/base/latest/base.css' />
+    <link type="text/css" rel="stylesheet" href="https://api.mapbox.com/mapbox-assembly/v0.12.0/assembly.min.css" />
+    <!-- <link type="text/css" rel="stylesheet" href='https://www.mapbox.com/base/latest/base.css' /> -->
     <link type="text/css" rel="stylesheet" href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.34.0/mapbox-gl.css" />
     <link type="text/css" rel="stylesheet" href="main.css">
 </head>
@@ -21,7 +21,10 @@
     // Set up Elm div
     var node = document.getElementById('main');
     var app = Elm.Main.embed(node);
+</script>
 
+
+<script type="text/javascript">
     // Write callbacks for incoming Elm Ports
     app.ports.setBbox.subscribe(function(bbox) {
         var sw = new mapboxgl.LngLat(bbox[0], bbox[1]);
@@ -53,14 +56,16 @@
 
     // TODO send data (bbox?) back to Elm
     // app.ports.toElm.send("heyo");
+</script>
 
 
+<script type="text/javascript">
     // Set up MapboxGLJS map element
     mapboxgl.accessToken = 'pk.eyJ1IjoicGVycnlnZW8iLCJhIjoiNjJlNTZmNTNjZTFkZTE2NDUxMjg2ZDg2ZDdjMzI5NTEifQ.-f-A9HuHrPZ7fHhlZxYLHQ';
 
     var map = new mapboxgl.Map({
         container: 'map',
-        style: 'mapbox://styles/mapbox/streets-v9',
+        style: 'mapbox://styles/mapbox/light-v9',
         center: [0, 0],
         maxZoom: 14,
         zoom: 1
@@ -94,8 +99,8 @@
                 "line-cap": "round"
             },
             "paint": {
-                "line-color": "#224",
-                "line-width": 3
+                "line-color": "#273d56",
+                "line-width": 2
             },
             "source": {
                 "type": "geojson",
@@ -109,10 +114,21 @@
         // Destinations
         map.addLayer({
            "id": "destinations",
-           "type": "circle",
-           "paint": {
-               "circle-radius": 7,
-               "circle-color": "#242"
+           "type": "symbol",
+           "layout": {
+                "icon-image": "marker-15",
+                "icon-allow-overlap": true
+                // "text-field": "{shortName}",
+                // "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+                // "text-size": 10,
+                // "text-letter-spacing": 0.05,
+                // "text-offset": [0, 1.5]
+           },
+            "paint": {
+                "icon-color": "#273d56",
+                "text-color": "#273d56",
+                "text-halo-color": "#fff",
+                "text-halo-width": 2
            },
            "source": {
                 "type": "geojson",

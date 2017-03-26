@@ -26,16 +26,16 @@ resultsListView model =
 
 destinationView : CarmenFeature -> Html Msg
 destinationView feature =
-    li []
-    [ div []
-        [ div [ class "destination" ]
-            [ text feature.placeName
-            , div [ class "flex-parent-inline" ]
-                [ button [ class "btn btn--pill btn--pill-hl", onClick (MoveDestination feature -1) ]
+    li [ class "destination shadow-darken10-on-hover round"]
+    [ div [ class "grid" ]
+        [ div [ class "col col--10 destination-name" ] [ text feature.placeName ]
+        , div [ class "col col--2" ]
+            [ div [ class "fr" ] 
+                [ button [ class "btn--white color-gray btn btn--xs btn--pill btn--pill-hl", onClick (MoveDestination feature -1) ]
                          [ span [ property "innerHTML" (string "&uarr;") ] []]
-                , button [ class "btn btn--pill btn--pill-hc", onClick (MoveDestination feature 1) ]
+                , button [ class "btn--white color-gray btn btn--xs btn--pill btn--pill-hc", onClick (MoveDestination feature 1) ]
                          [ span [ property "innerHTML" (string "&darr;") ] []]
-                , button [ class "btn btn--pill btn--pill-hr", onClick (DeleteDestination feature) ]
+                , button [ class "btn--white color-gray btn btn--xs btn--pill btn--pill-hr", onClick (DeleteDestination feature) ]
                          [ text "x" ]
                 ]
             ]
@@ -78,7 +78,7 @@ mainView model =
     div []
     [ div [ class "right-bar" ]
         [ logo
-        , h2 [ ] [ text "Destinations" ]
+        , h2 [ class "txt-h3" ] [ text "Trip Routing Demo" ]
         , destinationListView model
         , searchBox model
         , resultsListView model

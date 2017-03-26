@@ -38,12 +38,24 @@ type Msg
     | DirectionsResult (Result Http.Error (List RouteFeature))
 
 
+shortName : String -> String
+shortName name =
+     let
+         res = List.head <| String.split "," name
+     in
+        case res of
+            Just x -> x
+            Nothing -> ""
+
+
 carmenFeatureObject : CarmenFeature -> Value
 carmenFeatureObject feature =
     object
     [ ("type", string "Feature")
     , ("properties", object
-        [ ("place_name", string feature.placeName) ])
+        [ ("placeName", string feature.placeName)
+        , ("shortName", string (shortName feature.placeName) )
+        ])
     , ("geometry", object
         [ ("type", string "Point")
         , ("coordinates", list [(float feature.lng), (float feature.lat)])

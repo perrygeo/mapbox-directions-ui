@@ -1,4 +1,4 @@
-module Updates exposing (update)
+module Updates exposing (update, updateDestinations)
 
 import MapboxGl
 import MapboxApi

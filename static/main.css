@@ -64,8 +64,8 @@ h3 {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    background-color: #273d56!important;
-    color: white;
+    /* background-color: #273d56!important; */
+    /* color: white; */
 }
 
 .destinations-list {
@@ -105,11 +105,31 @@ ul, ol {
     margin-bottom: 0;
 }
 
-p.destination { 
-    margin-top: 18px;
-    margin-bottom: 8px;
+.destination-name { 
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  font-size: 88%;
+}
+
+li.destination {
+    padding: 10px;
+    padding-right: 4px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 1px solid lightgrey;
 }
 
 .mb-logo {
     margin-bottom: 16px;
+    background: transparent url(https://www.mapbox.com/base/latest/base@2x.png) no-repeat 0 0;
+    display: inline-block;
+    vertical-align: top;
+    height: 40px;
+    width: 100px;
+    text-indent: -999em;
+    overflow: hidden;
+    -webkit-background-size: 100px 350px;
+    background-size: 100px 350px;
+}
 }
