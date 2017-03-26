@@ -1,0 +1,142 @@
+body { margin:0; padding:0; }
+
+#map { position:absolute; top:0; bottom:0; right: 0; width:66%; z-index:-1}
+
+.search {
+    margin-top: 18px;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+h3 {
+    margin-bottom: 18px;
+}
+
+.input {
+    height: 46px;
+    padding: 10px 16px;
+    font-size: 18px;
+    line-height: 1.3333333;
+    border-radius: 3px;
+    width: 100%;
+}
+
+.results-list {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 424px;
+    font-size: 75%;
+    margin: 6px;
+}
+
+.results-list ul {
+    list-style-type: none;
+    padding-left: 6px;
+}
+
+.results-list a {
+    text-decoration: none;
+}
+
+.resuts-list a:visited {
+    text-decoration: none;
+}
+
+.results-list a:hover {
+    text-decoration: underline;
+}
+
+.results-list a:active {
+    text-decoration: underline;
+}
+
+.right-bar {
+    position:absolute;
+    top: 0;
+    bottom 0;
+    left: 0;
+    height:100%;
+    width: 34%;
+    padding: 10px;
+    border-right: 1px darkgrey solid;
+    z-index: -1;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    /* background-color: #273d56!important; */
+    /* color: white; */
+}
+
+.destinations-list {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.destinations-list ol {
+    list-style-type: none;
+    padding-left: 6px;
+}
+
+.destinations-list p {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+footer {
+    position:absolute;
+    bottom:0;
+    left:220px;
+    padding:12px;
+}
+
+.waiting {
+    position:absolute;
+    top: 0;
+    right: 0;
+    margin-right: 24px;
+    margin-top: 24px;
+}
+
+ul, ol {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.destination-name { 
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  font-size: 88%;
+}
+
+li.destination {
+    padding: 10px;
+    padding-right: 4px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 1px solid lightgrey;
+}
+
+.mb-logo {
+    margin-bottom: 16px;
+    background: transparent url(https://www.mapbox.com/base/latest/base@2x.png) no-repeat 0 0;
+    display: inline-block;
+    vertical-align: top;
+    height: 40px;
+    width: 100px;
+    text-indent: -999em;
+    overflow: hidden;
+    -webkit-background-size: 100px 350px;
+    background-size: 100px 350px;
+}
+
+.txt-h3 {
+    margin-bottom: 16px;
+}
+
+.btn--xs {
+    outline: none!important;
+}
