@@ -1,3 +1,5 @@
+GITREF := $(git rev-parse --abbrev-ref HEAD)
+
 default: clean-logs js static
 
 .PHONY: js static clean-logs publish format
@@ -11,9 +13,9 @@ static:
 clean-logs:
 	find . -name 'npm-debug.log.*' | xargs rm
 
+.PHONY: publish
 publish: clean-logs js static
-	aws s3 sync --delete build/ s3://perrygeo-test/mapbox-directions-ui/ --acl public-read
-	echo "open https://s3.amazonaws.com/perrygeo-test/mapbox-directions-ui/index.html"
+	ghp-import -n -p -f build/ -c directions.perrygeo.com -m "update docs at $(GITREF)"
 
 format:
 	elm-format --yes src/

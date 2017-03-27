@@ -122,7 +122,8 @@ moveItem item relPos data =
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    case Debug.log "Update Message:" msg of
+    -- case Debug.log "Update Message:" msg of
+    case msg of
         SetSearch newname ->
             let
                 runSearch =
